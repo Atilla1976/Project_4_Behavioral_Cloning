@@ -9,7 +9,7 @@ from sklearn.model_selection import train_test_split
 from scipy import ndimage
 
 # Parameters
-epochs = 5
+epochs = 3
 validation_split = 0.2
 correction = 0.2
 row, col, ch = 160, 320, 3
