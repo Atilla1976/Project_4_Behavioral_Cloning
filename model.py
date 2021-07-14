@@ -16,11 +16,11 @@ row, col, ch = 160, 320, 3
 batch_size = 32
 
 # Read in each row/line from driving_log.csv
-lines = []  # samples
+samples = []  # samples
 with open('data/driving_log.csv') as csvfile:
     reader = csv.reader(csvfile)
     for line in reader:
-        lines.append(line)
+        samples.append(line)
 
 
 def generator(samples, batch_size):
@@ -65,38 +65,39 @@ def generator(samples, batch_size):
 
 
 # Using Generators
-train_samples, validation_samples = train_test_split(lines, test_size=validation_split)
+train_samples, validation_samples = train_test_split(samples, test_size=validation_split)
 train_generator = generator(train_samples, batch_size=batch_size)
 validation_generator = generator(validation_samples, batch_size=batch_size)
 
 # Setup Keras
 from keras.models import Sequential  # class provides common functions like fit(), evaluate() and compile()
 from keras.models import Model
-from keras.layers import Lambda
-from keras.layers.core import Dense, Activation, Flatten, Dropout
+#from keras.layers import Lambda
+from keras.layers.core import Dense, Activation, Flatten, Dropout, Lambda
 from keras.layers.convolutional import Conv2D, Cropping2D
 from keras.layers.pooling import MaxPooling2D
 
 # Build the Neural Network
 model = Sequential()
 model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(160, 320, 3)))
-model.add(Cropping2D(cropping=((75, 25), (0, 0))))
-model.add(Conv2D(24, (5, 5), padding='valid', activation='relu'))
-model.add(MaxPooling2D())
-model.add(Dropout(0.25))
-model.add(Conv2D(36, (5, 5), padding='valid', activation='relu'))
-model.add(MaxPooling2D())
-model.add(Conv2D(48, (5, 5), padding='valid', activation='relu'))
-model.add(MaxPooling2D())
-model.add(Conv2D(64, (3, 3), padding='valid', activation='relu'))
-model.add(Conv2D(64, (1, 1), padding='valid', activation='relu'))
-model.add(MaxPooling2D())
+model.add(Cropping2D(cropping=((70, 25), (0, 0))))
+#model.add(Convolution2D(24, 5, 5, subsample=(2,2), activation="relu"))
+model.add(Conv2D(24, (5,5), strides=(2, 2), activation='relu'))
+#model.add(MaxPooling2D())
+#model.add(Dropout(0.25))
+model.add(Conv2D(36, (5,5), strides=(2, 2), activation='relu'))
+#model.add(MaxPooling2D())
+model.add(Conv2D(48, (5,5), strides=(2, 2), activation='relu'))
+#model.add(MaxPooling2D())
+model.add(Conv2D(64, (3, 3), activation='relu'))
+model.add(Conv2D(64, (1, 1), activation='relu'))
+#model.add(MaxPooling2D())
 model.add(Flatten())
-model.add(Dropout(0.25))
+#odel.add(Dropout(0.25))
 model.add(Dense(100))
-model.add(Dropout(0.25))
+#model.add(Dropout(0.25))
 model.add(Dense(50))
-model.add(Dropout(0.25))
+#model.add(Dropout(0.25))
 model.add(Dense(10))
 model.add(Dense(1))
 model.summary()
@@ -104,24 +105,17 @@ model.summary()
 model.compile(loss='mse', optimizer='adam')
 # model.fit(X_train, y_train, validation_split = validation_split, shuffle=True, = epochs) # default number of epochs is 10 in Keras
 #history_object =
-model.fit_generator(train_generator,
-                    steps_per_epoch=ceil(len(train_samples) / batch_size),
-                    validation_data=validation_generator,
-                    validation_steps=ceil(len(validation_samples) / batch_size),
-                    epochs=epochs,
-                    verbose=1)
+model.fit(train_generator,
+        steps_per_epoch=ceil(len(train_samples)/batch_size),
+        validation_data=validation_generator,
+        validation_steps=ceil(len(validation_samples)/batch_size),
+        epochs=epochs,
+        verbose=1)
 
 model.save('model.h5')
+print('Done! Model Saved!')
 
-### print the keys contained in the history object
-print(history_object.history.keys())
-
-### plot the training and validation loss (instead printing, save it when using command line terminal)
-plt.plot(history_object.history['loss'])
-plt.plot(history_object.history['val_loss'])
-plt.title('model mean squared error loss')
-plt.ylabel('mean squared error loss')
+'''plt.ylabel('mean squared error loss')
 plt.xlabel('epoch')
 plt.legend(['training set', 'validation set'], loc='upper right')
-# plt.show() # Only use this in Jupyter Notebooks. Do not use this in the command line terminal which can't display any graphics. Instead save the file (see next line)
-plt.savefig('examples/loss_visualization.png')
+plt.savefig('examples/loss_visualization.png')'''
