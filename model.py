@@ -17,9 +17,13 @@ batch_size = 32
 
 # Read in each row/line from driving_log.csv
 samples = []  # samples
+header = True
 with open('data/driving_log.csv') as csvfile:
     reader = csv.reader(csvfile)
     for line in reader:
+        if header:
+            header = False
+            continue
         samples.append(line)
 
 
