@@ -30,7 +30,7 @@ The goals / steps of this project are the following:
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
 
-![alt text](./run1_faster.mp4)
+![alt text](./fast1.mp4)
 
 ---
 ### Files Submitted & Code Quality
