@@ -5,7 +5,7 @@
 
 In this project, a convolutional neural network (CNN) is trained to clone a human driving behavior.
 
-For data collection a simulator provides by Udacity can be used. The simulator collects images and the associate steering angles.
+For data collection a simulator provides by Udacity could be used. The simulator collects images and the associate steering angles.
 The collected dataset is used to train the convolutional neural network. Subsequently this model is used to drive the vehicle autonomously around the track in the simulator.
 
 
@@ -22,8 +22,8 @@ The goals / steps of this project are the following:
 [image1]: ./P4_images/placeholder.png "Model Visualization"
 [image2]: ./P4_images/placeholder.png "Grayscaling"
 [image3]: ./P4_images/placeholder_small.png "Recovery Image"
-[image4]: ./P4_images/placeholder_small.png "Recovery Image"
-[image5]: ./P4_images/CNN.png "Recovery Image"
+[image4]: ./P4_images/CNN.png "NVIDIA CNN"
+[image5]: ./P4_images/layers.png "Layers"
 [image6]: ./P4_images/flipped_image.png "Normal Image"
 [image7]: ./P4_images/different_perspectives.png "Flipped Image"
 
@@ -62,7 +62,7 @@ The model.py file contains the code for training and saving the convolution neur
 
 I did not build the neural network from scratch. I used the NVIDIA convolutional neural network which was developed exactly for this purpose. This is structured as follows:
 
-![alt text][image5]
+![alt text][image4]
 
 
 The convolutional layers were chosen by NVIDIA empirically through a series of experiments that varied layer configurations. Strided convolutionals are used in the first three convolutional layers with a 2x2 stride and a 5x5 kernel and a non-strided convolution with a 3x3 kernel size in the last two convolutional layers.
@@ -109,16 +109,16 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
 
 Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
 
-![alt text][image1]
+![alt text][image5]
 
 #### 3. Creation of the Training Set & Training Process
 
-To capture good driving behavior, my approach was initially to record the following driving maneuvers.
+To capture good driving behavior, my approach was initially to record the following driving maneuvers:
 * two laps on track one using center lane driving.
 * driving the track in opposite direction to avoid a "left-drift" due driving counterclockwise
 * recording recovery driving from the side of the road back to the center
 
-But then I decided  to use only the provided dataset:
+But then I decided  to use only the provided dataset.
 
 * The effect of an assumed drift to the left could just as easily be prevented in the data augmentation stage by flipping the dataset.
 
@@ -132,9 +132,6 @@ But then I decided  to use only the provided dataset:
 
 
 
-After the collection process, I had X number of data points. I then preprocessed this data by ...
+I finally randomly shuffled the data set and put 20% of the data into a validation set. 
 
-
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
-
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 3 as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 3. I used an adam optimizer so that manually training the learning rate wasn't necessary.
