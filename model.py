@@ -88,7 +88,7 @@ model.add(Cropping2D(cropping=((70, 25), (0, 0))))
 #model.add(Convolution2D(24, 5, 5, subsample=(2,2), activation="relu"))
 model.add(Conv2D(24, (5,5), strides=(2, 2), activation='relu'))
 #model.add(MaxPooling2D())
-#model.add(Dropout(0.25))
+model.add(Dropout(0.25))
 model.add(Conv2D(36, (5,5), strides=(2, 2), activation='relu'))
 #model.add(MaxPooling2D())
 model.add(Conv2D(48, (5,5), strides=(2, 2), activation='relu'))
@@ -97,29 +97,22 @@ model.add(Conv2D(64, (3, 3), activation='relu'))
 model.add(Conv2D(64, (1, 1), activation='relu'))
 #model.add(MaxPooling2D())
 model.add(Flatten())
-#odel.add(Dropout(0.25))
+model.add(Dropout(0.25))
 model.add(Dense(100))
-#model.add(Dropout(0.25))
+model.add(Dropout(0.25))
 model.add(Dense(50))
-#model.add(Dropout(0.25))
+model.add(Dropout(0.25))
 model.add(Dense(10))
 model.add(Dense(1))
 model.summary()
 
 model.compile(loss='mse', optimizer='adam')
-# model.fit(X_train, y_train, validation_split = validation_split, shuffle=True, = epochs) # default number of epochs is 10 in Keras
-#history_object =
-model.fit(train_generator,
-        steps_per_epoch=ceil(len(train_samples)/batch_size),
-        validation_data=validation_generator,
-        validation_steps=ceil(len(validation_samples)/batch_size),
-        epochs=epochs,
-        verbose=1)
+
+history_obj = model.fit_generator(train_generator,
+                    steps_per_epoch=ceil(len(train_samples)/batch_size),
+                    validation_data=validation_generator,
+                    validation_steps=ceil(len(validation_samples)/batch_size),
+                    epochs=epochs,
+                    verbose=1)
 
 model.save('model.h5')
-print('Done! Model Saved!')
-
-'''plt.ylabel('mean squared error loss')
-plt.xlabel('epoch')
-plt.legend(['training set', 'validation set'], loc='upper right')
-plt.savefig('examples/loss_visualization.png')'''
