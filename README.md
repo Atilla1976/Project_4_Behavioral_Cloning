@@ -19,13 +19,10 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./P4_images/placeholder.png "Model Visualization"
-[image2]: ./P4_images/placeholder.png "Grayscaling"
-[image3]: ./P4_images/placeholder_small.png "Recovery Image"
-[image4]: ./P4_images/CNN.png "NVIDIA CNN"
-[image5]: ./P4_images/layers.png "Layers"
-[image6]: ./P4_images/flipped_image.png "Normal Image"
-[image7]: ./P4_images/different_perspectives.png "Flipped Image"
+[image1]: ./P4_images/CNN.png "NVIDIA CNN"
+[image2]: ./P4_images/layers.png "Layers"
+[image3]: ./P4_images/flipped_image.png "Normal Image"
+[image4]: ./P4_images/different_perspectives.png "Flipped Image"
 
 ## Rubric Points
 
@@ -41,10 +38,11 @@ The goals / steps of this project are the following:
 #### 1. Submission includes all required files and can be used to run the simulator in autonomous mode
 
 My project includes the following files:
-* model.py containing the script to create and train the model
-* drive.py for driving the car in autonomous mode
-* model.h5 containing a trained convolution neural network 
-* writeup_report.md summarizing the results
+* [model.py](https://github.com/Atilla1976/SDCarND_P4_Behavioral_Cloning/blob/main/model.py) containing the script to create and train the model
+* [drive.py](https://github.com/Atilla1976/SDCarND_P4_Behavioral_Cloning/blob/main/drive.py) for driving the car in autonomous mode
+* [model.h5](https://github.com/Atilla1976/SDCarND_P4_Behavioral_Cloning/blob/main/model.h5) containing a trained convolution neural network 
+* Readme.md summarizing the results
+* [run1.mp4](https://github.com/Atilla1976/SDCarND_P4_Behavioral_Cloning/blob/main/run1.mp4) - video recording of my vehicle driving autonomously around the track for at least one full lap
 
 #### 2. Submission includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
@@ -62,7 +60,7 @@ The model.py file contains the code for training and saving the convolution neur
 
 I did not build the neural network from scratch. I used the NVIDIA convolutional neural network which was developed exactly for this purpose. This is structured as follows:
 
-![alt text][image4]
+![alt text][image1]
 
 
 The convolutional layers were chosen by NVIDIA empirically through a series of experiments that varied layer configurations. Strided convolutionals are used in the first three convolutional layers with a 2x2 stride and a 5x5 kernel and a non-strided convolution with a 3x3 kernel size in the last two convolutional layers.
@@ -87,31 +85,20 @@ For details about why I only used this data, see the next section.
 
 ### Model Architecture and Training Strategy
 
-#### 1. Solution Design Approach
+#### 1. Final Model Architecture
 
-The overall strategy for deriving a model architecture was to ...
+The final model architecture (model.py lines 85-106) consists of the NVIDIA convolution neural network as shown above. I implemented 4 dropout layers each with a rate of 0.25 to avoid overfitting.
 
-My first step was to use a convolution neural network model similar to the ... I thought this model might be appropriate because ...
 
-In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
 
-To combat the overfitting, I modified the model so that ...
+```sh
+model.summary()
+```
+returns the following information about the shape and sequence of the all network layers
 
-Then I ... 
+![alt text][image2]
 
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track... to improve the driving behavior in these cases, I ....
-
-At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
-
-#### 2. Final Model Architecture
-
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
-
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
-
-![alt text][image5]
-
-#### 3. Creation of the Training Set & Training Process
+#### 2. Creation of the Training Set & Training Process
 
 To capture good driving behavior, my approach was initially to record the following driving maneuvers:
 * two laps on track one using center lane driving.
@@ -122,13 +109,13 @@ But then I decided  to use only the provided dataset.
 
 * The effect of an assumed drift to the left could just as easily be prevented in the data augmentation stage by flipping the dataset.
 
-![alt text][image6]
+![alt text][image3]
 
 
-* And even recording recovery driving can be replaced by using the multicamera dataset. Here are three different datasets from three camera positions - one in the center, one on the left and one on the right. From the perspective of the left camera, the steering angle is less than the steering angle from the center camera. From the right camera's perspective, the steering angle would be larger than the angle from the center camera. During training i fed the left and right camera images to my model as if they were coming from the center camera. 
+* And even recording recovery driving can be replaced by using the multicamera dataset. Here are three different datasets from three camera positions - one in the center, one on the left and one on the right. From the perspective of the left camera, the steering angle is less than the steering angle from the center camera. From the right camera's perspective, the steering angle would be larger than the angle from the center camera. During training I fed the left and right camera images to my model as if they were coming from the center camera. For this reason, I initially assumed a correction value for the steering angle of +/- 0.2 for the left and right camera images. This value proved to be expedient.
 
 
-![alt text][image7]
+![alt text][image4]
 
 
 
